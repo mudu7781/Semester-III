@@ -5,7 +5,9 @@ JAVA GUVI  project for 3rd sem. (SBI ONLINE BANKING SYSTEM)
 
 ## 📌 Overview
 This project is a console-based banking management system built using Java.  
-It simulates real banking operations such as account creation, deposits, withdrawals, ATM services, cheque operations, OTP-based verification, and persistent data storage using serialization. The system includes exception handling to prevent crashes due to invalid input or system failures.
+It simulates real banking operations such as account creation, deposits, withdrawals, ATM services, cheque operations, OTP-based verification, and persistent data storage using serialization. 
+The system includes exception handling to prevent crashes due to invalid input or system failures. 
+The application integrates file-based persistence with JDBC-based transactional operations for critical workflows.
 
 ---
 
