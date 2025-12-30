@@ -354,7 +354,9 @@ System.out.println("Invalid amount.");
  if (amt > sender.balance) { 
 System.out.println("Insufficient balance.");
  return; 
-} if (!verifyOtp()) return; sender.balance -= amt; receiver.balance += amt;
+} if (!verifyOtp()) return;
+fundTransferDB(sender.accountNumber, benAcc, amt);
+sender.balance -= amt; receiver.balance += amt;
  System.out.printf("₹%.2f transferred to %s (Acc#: %d).\n", amt, receiver.name, 
 receiver.accountNumber); 
 System.out.printf("Your new balance: ₹%.2f\n", sender.balance);
@@ -484,6 +486,34 @@ System.out.println("Insufficient balance.");
 amt, c.balance);
  saveData(); 
 } 
+static synchronized void fundTransferDB(long fromAcc, long toAcc, double amt) {
+    try (java.sql.Connection con = DBConnection.getConnection()) {
+
+        con.setAutoCommit(false);
+
+        java.sql.PreparedStatement debit = con.prepareStatement(
+            "UPDATE customers SET balance = balance - ? WHERE accountNumber = ?"
+        );
+        debit.setDouble(1, amt);
+        debit.setLong(2, fromAcc);
+        debit.executeUpdate();
+
+        java.sql.PreparedStatement credit = con.prepareStatement(
+            "UPDATE customers SET balance = balance + ? WHERE accountNumber = ?"
+        );
+        credit.setDouble(1, amt);
+        credit.setLong(2, toAcc);
+        credit.executeUpdate();
+
+        con.commit();
+        System.out.println("Transaction completed using DB");
+
+    } catch (Exception e) {
+        System.out.println("DB transaction failed");
+    }
+}
+
+
 // --------- File Handling Methods --------- 
 static void saveData() { 
 try (ObjectOutputStream oos = new ObjectOutputStream(new 
@@ -507,4 +537,20 @@ customersByAccount = ds.customersByAccount;
 System.out.println("Error loading data: " + e.getMessage()); 
 } 
 } 
+
+}
+
+class TransferThread extends Thread {
+    long from, to;
+    double amount;
+
+    TransferThread(long from, long to, double amount) {
+        this.from = from;
+        this.to = to;
+        this.amount = amount;
+    }
+
+    public void run() {
+        SBIBanking.fundTransferDB(from, to, amount);
+    }
 }
