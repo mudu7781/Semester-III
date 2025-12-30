@@ -2,8 +2,13 @@
 
 ## **📌 Overview**
 
-A console-based banking management system built in Java that simulates real banking operations like account creation, deposits, withdrawals, ATM services, cheque handling, secure OTP operations, and customer/admin authentication.
-All customer data is stored persistently through Java Serialization.
+This project is a console-based banking management system built using Java.  
+It simulates real banking operations such as account creation, deposits, withdrawals, ATM services, cheque operations, OTP-based verification, and persistent data storage using serialization and Database Conmnection.
+The system includes exception handling to prevent crashes due to invalid input or system failures. 
+The application integrates file-based persistence with JDBC-based transactional operations for critical workflows.
+User menu selections act as events, processed synchronously or via multithreaded execution for concurrent operations.
+Both client-side (input validation) and server-side (transaction checks) validations are implemented.
+Innovative features include OTP-based verification and synchronized multithreaded fund transfers.
 
 ---
 
@@ -157,5 +162,6 @@ Password: PRAVESH@123
 * Database integration (MySQL / PostgreSQL)
 * Online/Netbanking module
 * Transaction history logs
+
 
 ---
